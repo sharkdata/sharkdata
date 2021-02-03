@@ -1,0 +1,144 @@
+{% extends "sharkdata_base.html" %}
+
+{% block title %}SHARKdata - Datasets{% endblock %}
+
+{% block header %}Datasets{% endblock %}
+
+{% block content %}
+
+        <script type="text/javascript">
+            function reload_page(element) {
+                window.location = "/datasets/?page={{ page }}&per_page={{ per_page }}&datatype=" + $('#datatype_select').val()
+            }
+        </script>            
+
+		{% block standard-alerts %}
+		{% endblock standard-alerts %}
+		
+		<p>
+			<div class="row">
+			    
+                <div class="col-xs-12 col-sm-6">
+                <span>Datatype filter: </span>
+                <select id= "datatype_select" onchange="reload_page(this)">
+                    <option value="All">All</option>
+
+                    {% for datatype in datatypes %}
+                        {% if datatype == selected_datatype %}
+                            <option value={{ datatype }} selected="selected">{{ datatype }}</option>
+                        {% else %}
+                            <option value={{ datatype }}>{{ datatype }}</option>
+                        {% endif %}
+                    {% endfor %}
+
+                </select>
+				</div>
+
+                <div class="col-xs-12 col-sm-6">
+                
+                <a class="btn btn-sm btn-xs" href="/datasets/?page=1&per_page={{ per_page }}&datatype={{ selected_datatype }}"><span class="glyphicon glyphicon-fast-backward"></span></a>
+                <a class="btn btn-sm btn-xs" href="/datasets/?page={{ prev_page }}&per_page={{ per_page }}&datatype={{ selected_datatype }}"><span class="glyphicon glyphicon-backward"></span></a>
+                <a class="btn btn-sm btn-xs" href="/datasets/?page={{ next_page }}&per_page={{ per_page }}&datatype={{ selected_datatype }}"><span class="glyphicon glyphicon-forward"></span></a>
+                <a class="btn btn-sm btn-xs" href="/datasets/?page={{ pages }}&per_page={{ per_page }}&datatype={{ selected_datatype }}"><span class="glyphicon glyphicon-fast-forward"></span></a>
+
+                <span>{{ row_info }}</span>
+				</div>
+			    
+			</div>
+		</p>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <span class="panel-title">Available datasets</span>
+            </div>
+
+            <div class="table-container">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Datatype</th>
+                            <th>Dataset&nbsp;name</th>
+                            <th>Metadata</th>
+                            <th>Data</th>
+                            <th>Packages</th>
+<!--                             <th>Version</th> -->
+                            <th>Dataset&nbsp;file&nbsp;name</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for dataset in datasets %}
+                        <tr>
+                            <td>{{ dataset.datatype }}</td>
+                            <td>{{ dataset.dataset_name }}</td>
+                            
+							<!-- METADATA -->
+                            <td>
+                              <div class="btn-group">
+                                <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">
+                                  Metadata <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                  <li><a href="/datasets/{{ dataset.dataset_name }}/metadata.txt">as text</a></li>
+                                  <li><a href="/datasets/{{ dataset.dataset_name }}/metadata.json">as JSON</a></li>
+                                  <!-- <li><a href="/datasets/{{ dataset.dataset_name }}/metadata.xml">as XML (Test: ISO 19139)</a></li> -->
+                                </ul>
+                              </div>
+                            </td>  
+                            
+							<!-- DATA -->
+                            <td>
+                              <div class="btn-group">
+                                <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">
+                                  Data <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                  <li><a href="/datasets/{{ dataset.dataset_name }}/data.txt">as text</a></li>
+                                  <li><a href="/datasets/{{ dataset.dataset_name }}/data.json">as JSON</a></li>
+                                  
+                                  {% if dataset.column_data_available %}
+                                    <li><a href="/datasets/{{ dataset.dataset_name }}/data_columns.txt">as text (parameters as columns)</a></li>
+                                    <li><a href="/datasets/{{ dataset.dataset_name }}/data_columns.json">as JSON (parameters as columns)</a></li>
+                                  {% endif %}
+
+                                </ul>
+                              </div>
+                            </td>  
+                            
+							<!-- PACKAGES -->
+                            <td>
+                              <div class="btn-group">
+                                <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">
+                                  Packages <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                  <li><a href="/datasets/{{ dataset.dataset_name }}/shark_archive.zip">SHARK Archive (zip)</a></li>
+                                </ul>
+                              </div>
+                            </td>  
+                            
+                            <td>{{ dataset.dataset_file_name }}</td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <p>
+            <div class="col-xs-12 col-sm-6">
+            </div>
+            <div class="col-xs-12 col-sm-6">
+            <a class="btn btn-sm btn-xs" href="/datasets/?page=1&per_page={{ per_page }}&datatype={{ selected_datatype }}"><span class="glyphicon glyphicon-fast-backward"></span></a>
+            <a class="btn btn-sm btn-xs" href="/datasets/?page={{ prev_page }}&per_page={{ per_page }}&datatype={{ selected_datatype }}"><span class="glyphicon glyphicon-backward"></span></a>
+            <a class="btn btn-sm btn-xs" href="/datasets/?page={{ next_page }}&per_page={{ per_page }}&datatype={{ selected_datatype }}"><span class="glyphicon glyphicon-forward"></span></a>
+            <a class="btn btn-sm btn-xs" href="/datasets/?page={{ pages }}&per_page={{ per_page }}&datatype={{ selected_datatype }}"><span class="glyphicon glyphicon-fast-forward"></span></a>
+            <span>{{ row_info }}</span>
+			</div>
+		</p>
+			
+
+{% endblock content %}

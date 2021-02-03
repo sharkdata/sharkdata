@@ -1,0 +1,45 @@
+{% extends "sharkdata_base.html" %}
+
+{% block title %}SHARKdata - Resources{% endblock %}
+
+{% block header %}Resources{% endblock %}
+
+{% block content %}
+
+		{% block standard-alerts %}
+		{% endblock standard-alerts %}
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">Available resources</h2>
+            </div>
+
+            <div class="table-container">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Resource&nbsp;type</th>
+                            <th>Resource&nbsp;name</th>
+                            <th>Content</th>
+                            <th>Encoding</th>
+                            <th>Resource&nbsp;file&nbsp;name</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for resource in resources %}
+                        <tr>
+                            <td>{{ resource.resource_type }}</td>
+                            <td>{{ resource.resource_name }}</td>
+                            <td><a class="btn btn-primary btn-xs" href="/resources/{{ resource.resource_name }}/content.txt">Get content</a></td>
+                            <td>{{ resource.encoding }}</td>
+                            <td>{{ resource.resource_file_name }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+{% endblock content %}

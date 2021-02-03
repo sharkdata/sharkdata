@@ -1,0 +1,256 @@
+{% extends "sharkdata_base.html" %}
+
+{% block title %}SHARKdata - CTD profiles{% endblock %}
+
+{% block header %}CTD profiles{% endblock %}
+
+{% block content %}
+
+	<script type="text/javascript">
+		function reload_page(element) {
+			new_location =  "/ctdprofiles/?"
+			new_location += "page={{ page }}&per_page={{ per_page }}"
+			new_location += "&year=" + $('#year_select_id').val()
+			if ($('#project_select_id').val() != "All") { new_location += "&project=" + $('#project_select_id').val() }
+			if ($('#platform_select_id').val() != "All") { new_location += "&platform=" + $('#platform_select_id').val() }
+			if ($('#date_id').val() != "") { new_location += "&date=" + $('#date_id').val() }
+			if ($('#latitude_from_id').val() != "") { new_location += "&latitude_from=" + $('#latitude_from_id').val() }
+			if ($('#latitude_to_id').val() != "") { new_location += "&latitude_to=" + $('#latitude_to_id').val() }
+			if ($('#longitude_from_id').val() != "") { new_location += "&longitude_from=" + $('#longitude_from_id').val() }
+			if ($('#longitude_to_id').val() != "") { new_location += "&longitude_to=" + $('#longitude_to_id').val() }
+			if ($('#station_id').val() != "") { new_location += "&station=" + $('#station_id').val() }
+			if ($('#revision_date_after_id').val() != "") { new_location += "&revision_date_after=" + $('#revision_date_after_id').val() }
+// 			new_location += "&project=" + $('#project_select_id').val()
+// 			new_location += "&platform=" + $('#platform_select_id').val()
+// 			new_location += "&date=" + $('#date_id').val()
+// 			new_location += "&latitude_from=" + $('#latitude_from_id').val()
+// 			new_location += "&latitude_to=" + $('#latitude_to_id').val()
+// 			new_location += "&longitude_from=" + $('#longitude_from_id').val()
+// 			new_location += "&longitude_to=" + $('#longitude_to_id').val()
+// 			new_location += "&station=" + $('#station_id').val()
+// 			new_location += "&revision_date_after=" + $('#revision_date_after_id').val()
+			
+			window.location = new_location
+		}
+	</script>            
+
+{% block standard-alerts %}
+{% endblock standard-alerts %}
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<span class="panel-title">CTD filters</span>
+	</div>
+	
+	<div class="panel-body">
+	
+		<div class="row">
+			<div class="col-xs-12 col-sm-12">
+			<p>
+				<label for="year_select_id">Year: </label>
+				<!--<select id= "year_select" onchange="reload_page(this)"> -->
+				<select id= "year_select_id">
+					{% for year in years %}
+						{% if year == selected_year %}
+							<option value={{ year }} selected="selected">{{ year }}</option>
+						{% else %}
+							<option value={{ year }}>{{ year }}</option>
+						{% endif %}
+					{% endfor %}
+					</select>
+				
+				<label for="project_select_id">&nbsp;&nbsp;&nbsp;Project: </label>
+				<select id= "project_select_id">
+					<option value="All">All</option>
+					{% for project in projects %}
+						{% if project == selected_project %}
+							<option value={{ project }} selected="selected">{{ project }}</option>
+						{% else %}
+							<option value={{ project }}>{{ project }}</option>
+						{% endif %}
+					{% endfor %}
+					</select>
+				</select>
+				
+				<label for="platform_select_id">&nbsp;&nbsp;&nbsp;Platform: </label>
+				<select id= "platform_select_id">
+					<option value="All">All</option>
+					{% for platform in platforms %}
+						{% if platform == selected_platform %}
+							<option value={{ platform }} selected="selected">{{ platform }}</option>
+						{% else %}
+							<option value={{ platform }}>{{ platform }}</option>
+						{% endif %}
+					{% endfor %}
+					</select>
+				</select>
+			</p>	
+			</div>
+		</div>
+			
+		<div class="row">
+			<div class="col-xs-12 col-sm-12">
+			<p>
+				<label for="station_id">Station (part of name): </label>
+				<input id="station_id" type="text" size="8"value={{ selected_station }}>
+				
+				<label for="date_id" title="Format: YYYY-MM-DD">&nbsp;&nbsp;&nbsp;Date: </label>
+				<input id="date_id" type="date"  size="8" title="Format: YYYY-MM-DD" value={{ selected_date }}>
+			</p>
+			</div>			
+		</div>			
+			
+		<div class="row">
+			<div class="col-xs-12 col-sm-12">
+			<p>
+				<label for="latitude_from_id">Latitude from: </label>
+				<input id="latitude_from_id" type="text" size="3" value={{ selected_latitude_from }}>
+				
+				<label for="latitude_to_id">&nbsp;to: </label>
+				<input id="latitude_to_id" type="text" size="3"value={{ selected_latitude_to }}>
+				
+				<label for="longitude_from_id">&nbsp;&nbsp;&nbsp;Longitude from: </label>
+				<input id="longitude_from_id" type="text" size="3"value={{ selected_longitude_from }}>
+				
+				<label for="longitude_to_id">&nbsp;to: </label>
+				<input id="longitude_to_id" type="text" size="3"value={{ selected_longitude_to }}>
+			</p>
+			</div>			
+		</div>			
+			
+		<div class="row">
+			<div class="col-xs-12 col-sm-12">
+				<div class="col-xs-12 col-sm-12">
+					<div class="btn btn-default" onclick="reload_page(this)">Search</div>
+					&nbsp;
+<!--					<div class="btn btn-default" onclick="reload_page(this)" title="Download all filtered profiles into a single zip file">Download CTD profiles</div> -->
+<!--					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
+<!--					<label for="revision_date_after_id" title="Format: YYYY-MM-DD">&nbsp;&nbsp;&nbsp;Revision date (after): </label> -->
+<!--					<input id="revision_date_after_id" type="date"  size="8" title="Format: YYYY-MM-DD" value={{ selected_revision_date_after }}> -->
+				</div>
+			</div>		
+		</div>
+	</div>
+</div>
+
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<span class="panel-title">CTD profiles</span>
+		
+		<span>&emsp;&emsp;&emsp;&emsp;</span>
+		
+		<a class="btn btn-sm btn-xs" href="/ctdprofiles/?page=1&per_page={{ per_page }}&datatype={{ selected_datatype }}"><span class="glyphicon glyphicon-fast-backward"></span></a>
+		<a class="btn btn-sm btn-xs" href="/ctdprofiles/?page={{ prev_page }}&per_page={{ per_page }}&datatype={{ selected_datatype }}"><span class="glyphicon glyphicon-backward"></span></a>
+		<a class="btn btn-sm btn-xs" href="/ctdprofiles/?page={{ next_page }}&per_page={{ per_page }}&datatype={{ selected_datatype }}"><span class="glyphicon glyphicon-forward"></span></a>
+		<a class="btn btn-sm btn-xs" href="/ctdprofiles/?page={{ pages }}&per_page={{ per_page }}&datatype={{ selected_datatype }}"><span class="glyphicon glyphicon-fast-forward"></span></a>
+		
+		<span>{{ row_info }}</span>
+	</div>
+
+<!--     visit_year = models.CharField(max_length = 63) -->
+<!--     platform_code = models.CharField(max_length = 63) -->
+<!--     expedition_id = models.CharField(max_length = 255) -->
+<!--     visit_id = models.CharField(max_length = 255) -->
+<!--     station_name = models.CharField(max_length = 255) -->
+<!--     latitude = models.FloatField() -->
+<!--     longitude = models.FloatField() -->
+<!--     water_depth_m = models.CharField(max_length = 63) -->
+<!--     sampler_type_code = models.CharField(max_length = 63) -->
+<!--     sample_date = models.CharField(max_length = 63) -->
+<!--     sample_project_code = models.CharField(max_length = 63) -->
+<!--     sample_orderer_code = models.CharField(max_length = 63) -->
+<!--     sampling_laboratory_code = models.CharField(max_length = 63) -->
+<!--     revision_date = models.CharField(max_length = 63) -->
+<!--     ctd_profile_name = models.CharField(max_length = 255) -->
+<!--     # Dataset. -->
+<!--     dataset_file_name = models.CharField(max_length = 255) -->
+<!--     ftp_file_path = models.CharField(max_length = 1023) -->
+
+	<div class="panel-body">
+	
+		<div class="table-container">
+			<table class="table table-striped">
+			<thead>
+			<tr>
+<!-- 			<th>Plot</th> -->
+			<th>Map</th>
+			<th>Get</th>
+			<th>Year</th>
+			<th>Platform</th>
+			<th>Serno</th>
+			
+			<th>Station</th>
+			<th>Date</th>
+			<th>Latitude</th>
+			<th>Longitude</th>
+			<th>Water&nbsp;depth</th>
+			
+			<th>Project</th>
+			<th>Orderer</th>
+			<th>Revision&nbsp;date</th>
+			<th>CTD&nbsp;profile</th>
+			<th>ZIP&nbsp;archive</th>
+			</tr>
+			</thead>
+			
+			<tbody>
+				{% for ctdprofile in ctdprofiles %}
+					<tr>
+<!-- 					<td><a class="btn btn-primary btn-xs" href="/ctdprofiles/plot/{{ ctdprofile.ctd_profile_name }}" title="Plot CTD profile">Plot</a></td> -->
+					<td><a class="btn btn-primary btn-xs" href="/ctdprofiles/map/{{ ctdprofile.ctd_profile_name }}" title="Show position on map"><span class="glyphicon glyphicon-globe"></span></a></td>
+					<td><a class="btn btn-primary btn-xs" href="/ctdprofiles/download/{{ ctdprofile.ctd_profile_name }}" title="Download single CTD profile"><span class="glyphicon glyphicon-download-alt"></span></a></td>
+					<td>{{ ctdprofile.visit_year }}</td>
+					<td>{{ ctdprofile.platform_code }}</td>
+					<td>{{ ctdprofile.visit_id }}</td>
+					
+					<td>{{ ctdprofile.station_name }}</td>
+					<td>{{ ctdprofile.sample_date }}</td>
+					<td>{{ ctdprofile.latitude }}</td>
+					<td>{{ ctdprofile.longitude }}</td>
+					<td>{{ ctdprofile.water_depth_m }}</td>
+					
+					<td>{{ ctdprofile.sample_project_code }}</td>
+					<td>{{ ctdprofile.sample_orderer_code }}</td>
+					<td>{{ ctdprofile.revision_date }}</td>
+					<td>{{ ctdprofile.ctd_profile_name }}</td>
+					
+					<td>{{ ctdprofile.dataset_file_name }}</td>
+<!-- 					<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-primary btn-xs" href="/ctdprofiles/{{ ctdprofile.ctd_profile_name }}/download" title="Download the SHARK archive file containing this profile"><span class="glyphicon glyphicon-download-alt"></span></a></td> -->
+					
+					
+					</tr>
+				{% endfor %}
+			</tbody>
+			</table>
+		</div>
+	
+	</div>
+</div>
+
+
+<!-- {% if True %} -->
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<span class="panel-title">Map</span>
+	</div>
+	<div class="panel-body">
+<!-- 		<iframe id="encoder_iframe" height="800pt" width="100%" src="/ctdprofiles/map/" > -->
+		<iframe id="encoder_iframe" height="800pt" width="100%" srcdoc="{{ map_html }}" >
+		</iframe>
+	</div>
+</div>
+<!-- {% endif %}	 -->
+<!-- {% if False %} -->
+<!-- <div class="panel panel-default"> -->
+<!-- 	<div class="panel-heading"> -->
+<!-- 		<span class="panel-title">Plot</span> -->
+<!-- 	</div> -->
+<!-- 	<div class="panel-body"> -->
+<!-- 		<iframe id="encoder_iframe" height="800pt" width="100%" src="/ctdprofiles/plot/" > -->
+<!-- 		</iframe> -->
+<!-- 	</div> -->
+<!-- </div> -->
+<!-- {% endif %}	 -->
+
+{% endblock content %}

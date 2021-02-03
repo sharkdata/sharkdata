@@ -1,0 +1,103 @@
+{% extends "sharkdata_base.html" %}
+
+{% block title %}SHARKdata - Export formats{% endblock %}
+
+{% block header %}Export formats{% endblock %}
+
+{% block content %}
+
+        <script type="text/javascript">
+            function reload_page(element) {
+                window.location = "/exportformats/?page={{ page }}&per_page={{ per_page }}&format=" + $('#format_select').val()
+            }
+        </script>            
+
+		{% block standard-alerts %}
+		{% endblock standard-alerts %}
+		
+		<p>
+			<div class="row">
+			    
+                <div class="col-xs-12 col-sm-6">
+                <span>Format filter: </span>
+                <select id= "format_select" onchange="reload_page(this)">
+                    <option value="All">All</option>
+                    {% for format in formats %}
+                    
+                        {% if format == selected_format %}
+                            <option value={{ format }} selected="selected">{{ format }}</option>
+                        {% else %}
+                            <option value={{ format }}>{{ format }}</option>
+                        {% endif %}
+                    {% endfor %}
+
+                </select>
+				</div>
+
+                <div class="col-xs-12 col-sm-6">
+                <a class="btn btn-sm btn-xs" href="/exportformats/?page=1&per_page={{ per_page }}&format={{ selected_format }}"><span class="glyphicon glyphicon-fast-backward"></span></a>
+                <a class="btn btn-sm btn-xs" href="/exportformats/?page={{ prev_page }}&per_page={{ per_page }}&format={{ selected_format }}"><span class="glyphicon glyphicon-backward"></span></a>
+                <a class="btn btn-sm btn-xs" href="/exportformats/?page={{ next_page }}&per_page={{ per_page }}&format={{ selected_format }}"><span class="glyphicon glyphicon-forward"></span></a>
+                <a class="btn btn-sm btn-xs" href="/exportformats/?page={{ pages }}&per_page={{ per_page }}&format={{ selected_format }}"><span class="glyphicon glyphicon-fast-forward"></span></a>
+                <span>{{ row_info }}</span>
+				</div>
+			    
+			</div>
+		</p>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <span class="panel-title">Available export files</span>
+            </div>
+
+            <div class="table-container">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Format</th>
+                            <th>Datatype</th>
+                            <th>Year</th>
+                            <th>Status</th>
+                            <th>Approved</th>
+                            <th>Export&nbsp;name</th>
+                            <th>Generated</th>
+                            <th>Export&nbsp;file</th>
+                            <th>Logfile</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for exportfile in exportfiles %}
+                        <tr>
+                            <td>{{ exportfile.format }}</td>
+                            <td>{{ exportfile.datatype }}</td>
+                            <td>{{ exportfile.year }}</td>
+                            <td>{{ exportfile.status }}</td>
+                           	<td>{{ exportfile.approved }}</td>
+                            <td>{{ exportfile.export_name }}</td>
+                            <td>{{ exportfile.generated_datetime|date:"Y-m-d H:i" }}</td>
+                            <td><a class="btn btn-primary btn-xs" href="/exportformats/{{ exportfile.export_file_name }}"><span class="glyphicon glyphicon-download-alt"></span></a></td>
+                            <!-- <td><a class="btn btn-primary btn-xs" href="/exportformats/{{ exportfile.export_name }}.xml"><span class="glyphicon glyphicon-download-alt"></span></a></td> -->
+                            <td><a class="btn btn-primary btn-xs" href="/exportformats/{{ exportfile.export_name }}_log.txt"><span class="glyphicon glyphicon-download-alt"></span></a></td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <p>
+            <div class="col-xs-12 col-sm-6">
+            </div>
+                <div class="col-xs-12 col-sm-6">
+                <a class="btn btn-sm btn-xs" href="/exportformats/?page=1&per_page={{ per_page }}&format={{ selected_format }}"><span class="glyphicon glyphicon-fast-backward"></span></a>
+                <a class="btn btn-sm btn-xs" href="/exportformats/?page={{ prev_page }}&per_page={{ per_page }}&format={{ selected_format }}"><span class="glyphicon glyphicon-backward"></span></a>
+                <a class="btn btn-sm btn-xs" href="/exportformats/?page={{ next_page }}&per_page={{ per_page }}&format={{ selected_format }}"><span class="glyphicon glyphicon-forward"></span></a>
+                <a class="btn btn-sm btn-xs" href="/exportformats/?page={{ pages }}&per_page={{ per_page }}&format={{ selected_format }}"><span class="glyphicon glyphicon-fast-forward"></span></a>
+                <span>{{ row_info }}</span>
+			</div>
+		</p>
+			
+{% endblock content %}

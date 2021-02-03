@@ -1,0 +1,34 @@
+{% extends "sharkdata_base.html" %}
+
+{% block content %}
+
+			{% block standard-alerts %}
+			{% endblock standard-alerts %}
+			
+            <div class="col-sm-9" id="content">
+                {% block doc-content %}
+                                                         
+                {% endblock doc-content %}
+            </div>
+
+            <div class="col-sm-3" id="sidebar">
+                {% block sidebar %}
+                <ul class="nav">
+                    <li><a href="/datasets/">Datasets</a></li>
+                    <li><a href="/ctdprofiles/">CTD profiles</a></li>
+                    <li class="nav-divider"></li>
+                    <li><a href="/exportformats/">Export formats</a></li>
+                    <li class="nav-divider"></li>
+                    <li><a href="/resources/">Resources</a></li>
+                    <!-- <li><a href="/sharkdataadmin/">Data administration</a></li> -->
+                    <li class="nav-divider"></li>
+                    <li><a href="/documentation/">Documentation</a></li>
+                    <li><a href="/examplecode/">Example code</a></li>
+                    <li><a href="/datapolicy/">Data policy</a></li>
+                    <li class="nav-divider"></li>
+                    <li><a href="/about/">About</a></li>
+                </ul>
+                {% endblock sidebar %}
+            </div>
+
+{% endblock content%}

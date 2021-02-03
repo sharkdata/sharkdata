@@ -1,0 +1,101 @@
+{% extends "sharkdata_doc_base.html" %}
+
+{% block title %}SHARKdata - Documentation{% endblock%}
+
+{% block header %}Documentation{% endblock%}
+
+{% block doc-content %}
+
+	<h3>Introduction</h3>
+	
+	<p>
+	SHARKdata is a web service with a REST API to be used for accessing 
+	marine environmental monitoring data from the seas surrounding Sweden.
+	SHARKdata also have a web site for documentation and administration where it 
+	is possible to access some parts of the data directly. 
+	</p>
+	
+	<p>
+	SHARKdata is build on the concept of datasets. A <strong>dataset</strong> is a collection of data 
+	with a <strong>unique identifier</strong> and connected <strong>metadata</strong> that describes the dataset.
+	Is should be possible to assign a <strong>version stamp</strong> to a dataset.
+	Metadata can, for example, be used by data catalogues like <a href="http://www.smhi.se/ecds">ECDS</a>.
+	</p>
+	
+	<p>
+	Requests via the REST API are made by URL:s, for example 
+	<a href="/datasets/table.txt">http://sharkdata.se/datasets/table.txt</a>
+	to get a text table containing all available datasets.
+	</p>
+	
+	<p>
+	The response format will vary depending on client needs. Text and 
+	<a href="http://json.org">JSON</a> formats are always available. Text files can 
+	always be opened in standard text editors or spreadsheet programs. JSON is easy 
+	to use if the client software is written in JavaScript or Python, but parsers are
+	available for other languages as well.
+	Other formats like KML, XML, WFS, etc. will be developed in cooperation
+	with clients when needed.
+	</p>
+	
+	<p>
+	SHARKdata is based on modules and new modules will be developed over time. 
+	The module <a href="/resources/">Resources</a> contains administrative data. It can contain files for 
+	header translations, screening of data, taxonomic information, etc.
+	</p>
+	
+	<p>
+	SHARKdata is currently under development and only a limited number of datasets 
+	and response formats are available for test.  
+	</p>
+	
+
+	<h3>Example URLs:</h3>
+	
+	<p>
+	There is no full API description yet, but these examples can be a start. 
+	Click on the links below to test the API.
+	</p>
+	
+	<h4>Datasets:</h4>
+	<ul>
+	    <li>Available datasets as a text table: <br>
+	    <a href="/datasets/table.txt">http://sharkdata.se/datasets/table.txt</a></li>
+	    <li>Available datasets as a list of JSON objects: <br>
+	    <a href="/datasets/list.json">http://sharkdata.se/datasets/list.json</a></li>
+	    <li>Available datasets as a JSON object with header and rows: <br>
+	    <a href="/datasets/table.json">http://sharkdata.se/datasets/table.json</a></li>
+	    
+	    <li>Metadata for a dataset in text: <br>
+	    <a href="/datasets/{{ first_dataset_name }}/metadata.txt">http://sharkdata.se/datasets/{{ first_dataset_name }}/metadata.txt</a></li>
+	    <li>Metadata for a dataset in JSON: <br>
+	    <a href="/datasets/{{ first_dataset_name }}/metadata.json">http://sharkdata.se/datasets/{{ first_dataset_name }}/metadata.json</a></li>
+	    
+	    <li>Data from a dataset in text: <br>
+	    <a href="/datasets/{{ first_dataset_name }}/data.txt">http://sharkdata.se/datasets/{{ first_dataset_name }}/data.txt</a></li>
+	    <li>Data from a dataset as a JSON object with header and rows: <br>
+	    <a href="/datasets/{{ first_dataset_name }}/data.json">http://sharkdata.se/datasets/{{ first_dataset_name }}/data.json</a></li>
+	    
+	</ul>
+	
+	<h4>Resources:</h4>
+	<ul>
+	    <li>Available resources as a text table: <br>
+	    <a href="/resources/table.txt">http://sharkdata.se/resources/table.txt</a></li>
+	    <li>Available resources as a JSON object with header and rows: <br>
+	    <a href="/resources/table.json">http://sharkdata.se/resources/table.json</a></li>
+	</ul>
+	
+	<h3>For developers</h3>
+	<p>
+	SHARKdata is written in Python 3 and based on the 
+	<a href="http://www.djangoproject.com">Django</a> web framework. 
+	All code developed in the project is open source and published under the 
+	<a href="http://opensource.org/licenses/mit">MIT license</a>.
+	The code repository can be found here: 
+	<a href="https://github.com/sharkdata/sharkdata">https://github.com/sharkdata/sharkdata</a>.
+	Please contact us by email to shark@smhi.se if you are developing a client application and 
+	want to be notified when we are planning changes to the API.
+	</p>
+
+{% endblock doc-content%}

@@ -1,0 +1,17 @@
+
+django
+bokeh
+folium
+tornado
+python-dateutil
+
+# lxml
+# numpy
+pandas
+# pillow
+# requests
+# setuptools
+
+# For vscode:
+pylint
+black

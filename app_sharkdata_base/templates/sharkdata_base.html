@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>{% block title %}SHARKdata - Home page{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% load static %}
+    <link rel="stylesheet" href="{% static "css/bootstrap.css" %}" />
+    <link rel="stylesheet" href="{% static "css/sharkdata.css" %}" />
+    <script src="{% static "js/jquery.js" %}"></script>
+    <script src="{% static "js/bootstrap.js" %}"></script>
+</head>
+<body>
+
+<!--    <header class="navbar navbar-inverse navbar-fixed-top"> -->
+    <header class="navbar navbar-default navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#primary-nav">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/about">SHARKdata</a>
+            </div>
+            <nav class="collapse navbar-collapse" id="primary-nav">
+                <ul class="nav navbar-nav">
+<!--                    <li class="active"><a href="/">Datasets</a></li> -->
+                    <li><a href="/">Datasets</a></li>
+                    <li><a href="/ctdprofiles/">CTD</a></li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">All modules<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/datasets/">Datasets</a></li>
+                            <li><a href="/ctdprofiles/">CTD profiles</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/exportformats/">Export formats</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/resources/">Resources</a></li>
+		                    <!-- <li><a href="/sharkdataadmin/">Data administration</a></li> -->
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/documentation/">Documentation</a></li>
+                            <li><a href="/examplecode/">Example code</a></li>
+                            <li><a href="/datapolicy/">Data policy</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/about/">About</a></li>
+                        </ul>
+                    </li>
+                    
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="row">
+
+            <div class="col-sm-12" id="content">
+                <div class="page-header">
+                    <h1>{% block header %} SHARKdata {% endblock header %}</h1>
+                </div>
+
+				{% block standard-alerts %}
+
+                {% endblock standard-alerts %}
+
+                {% block content %}
+                                                         
+                {% endblock content %}
+                
+            </div>
+                                                   
+        </div>
+    </div>
+
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-55550806-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+</body>
+</html>

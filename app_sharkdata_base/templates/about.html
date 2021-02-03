@@ -1,0 +1,52 @@
+{% extends "sharkdata_doc_base.html" %}
+
+{% load static %}
+
+{% block title %}SHARKdata - About{% endblock%}
+
+{% block header %}About <small>SHARKdata</small>{% endblock%}
+
+{% block doc-content %}
+
+	<p>
+	SHARK ("Svenskt HavsARKiv" / "Swedish Ocean Archive") 
+	contains marine environmental monitoring data
+	from the seas surrounding Sweden.
+	<a href="http://sharkweb.smhi.se">SHARKweb</a> is the main web application where
+	it is possible to search and download data from SHARK.
+	</p>
+
+	<p>
+	This site (<a href="http://sharkdata.se">SHARKdata</a>) is another way to 
+	access the same sets of data, but the target 
+	audience is other systems who wants to harvest data and use it, or publish 
+	the data in other systems, portals, etc.
+	</p>
+
+	<p>
+	More information about the SHARKdata system is available here: 
+	<a href="/documentation">SHARKdata documentation</a>. 
+	</p>
+	
+	<p>
+	<br>
+	SHARKdata is developed by the oceanographic unit of the 
+	<a href="http://smhi.se">Swedish Meterological and Hydrological Institute (SMHI)</a>.
+	<br>
+	The software is a product of the 
+	<a href="http://www.svenskalifewatch.se">Swedish LifeWatch project</a> 
+	funded by the 
+	<a href="http://www.vr.se">Swedish Science Council</a>.
+	</p>
+
+    <p>
+	<br>
+    Contact: shark@smhi.se
+    </p>
+
+    <p style="text-align: center;">
+	<br>
+	<img src="{% static "img/SMHIlogo.png" %}" alt="HTML">
+    </p>
+
+{% endblock doc-content%}
