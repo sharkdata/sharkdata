@@ -7,6 +7,8 @@ import os
 import pathlib
 import logging
 
+DEFAULT_APP_NAME = "sharkdata"
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
@@ -18,10 +20,29 @@ env_timezone = os.environ.get("ENV_DJANGO_TIMEZONE", "Europe/Stockholm")
 env_base_dir = os.environ.get("ENV_BASE_DIR", "")
 env_data_dir = os.environ.get("ENV_DATA_DIR")
 
+env_use_postgresql = os.environ.get("ENV_DJANGO_USE_POSTGRESQL", "False")
+env_psql_db_name = os.environ.get("ENV_DJANGO_PSQL_DB_NAME", "sharkdata")
+env_psql_db_user = os.environ.get("ENV_DJANGO_PSQL_DB_USER", "sharkdata")
+env_psql_db_pass = os.environ.get("ENV_DJANGO_PSQL_DB_PASSWORD", None)
+env_psql_db_host = os.environ.get("ENV_DJANGO_PSQL_DB_HOST", "127.0.0.1")
+env_psql_db_port = os.environ.get("ENV_DJANGO_PSQL_DB_PORT", None)
+
+env_enable_syslog = os.environ.get("ENV_DJANGO_ENABLE_SYSLOG", "False")
+
+env_app_name = os.environ.get("ENV_DJANGO_APP_NAME", DEFAULT_APP_NAME)
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 if env_debug.lower() in ["true", "t", "yes", "y"]:
     DEBUG = True
+
+USE_POSTGRESQL = False
+if env_use_postgresql.lower() in ["true", "t", "yes", "y"]:
+    USE_POSTGRESQL = True
+
+ENABLE_SYSLOG = False
+if env_enable_syslog.lower() in ["true", "t", "yes", "y"]:
+    ENABLE_SYSLOG = True
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -157,16 +178,28 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "sharkdata.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": str(pathlib.Path(SHARKDATA_DB, "db.sqlite3")),
+if USE_POSTGRESQL:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": env_psql_db_name,
+            "USER": env_psql_db_user,
+            "HOST": env_psql_db_host,
+        }
     }
-}
+    if env_psql_db_port != None:
+        DATABASES["default"]["PORT"] = env_psql_db_port
+    if env_psql_db_pass != None:
+        DATABASES["default"]["PASSWORD"] = env_psql_db_pass
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": str(pathlib.Path(SHARKDATA_DB, "db.sqlite3")),
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -210,24 +243,46 @@ STATICFILES_DIRS = (str(pathlib.Path(BASE_DIR, "app_sharkdata_base", "static")),
 STATIC_URL = "/static/"
 
 # Logging.
-if SHARKDATA_LOG:
-    LOGGING = {
-        "version": 1,
-        "disable_existing_loggers": False,
-        "handlers": {
-            "file_error": {
-                "level": "ERROR",
-                "class": "logging.handlers.RotatingFileHandler",
-                "filename": str(SHARKDATA_LOG) + "sharkdata_errors.log",
-                "maxBytes": 1024 * 1024,
-                "backupCount": 10,
-            },
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": True,
+    "formatters": {
+        "standard": {
+            "format": "python[" + env_app_name + "]: %(message)s",
+            "datefmt": "%d%b%YT%H:%M:%S",
+        }
+    },
+    "handlers": {
+        "file_error": {
+            "level": "ERROR",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": os.path.join(SHARKDATA_LOG, "sharkdata_errors.log"),
+            "maxBytes": 1024 * 1024,
+            "backupCount": 10,
         },
-        "loggers": {
-            "": {
-                "handlers": ["file_error"],
-                "level": "ERROR",
-                "propagate": True,
-            },
+        "file_debug": {
+            "level": "DEBUG",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": os.path.join(SHARKDATA_LOG, "sharkdata_debug.log"),
+            "maxBytes": 1024 * 1024,
+            "backupCount": 10,
         },
-    }
+        "syslog": {
+            "level": "INFO",
+            "class": "logging.handlers.SysLogHandler",
+            "formatter": "standard",
+            "facility": "local3",
+            "address": "/dev/log",
+        },
+    },
+    "loggers": {
+        "": {
+            "handlers": ["file_error", "file_debug"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+    },
+}
+
+if ENABLE_SYSLOG:
+    LOGGING["loggers"][""]["handlers"].append("syslog")

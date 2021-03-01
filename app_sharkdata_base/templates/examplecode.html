@@ -44,7 +44,7 @@ def execute():
     """
     
     # URL to the datasets part of SHARKdata.
-    sharkdata_url = u'http://sharkdata.se/datasets/'
+    sharkdata_url = u'https://sharkdata.smhi.se/datasets/'
 
     # Download a list of all available datasets. The JSON format is used.
     datasets = json.load(urllib2.urlopen(sharkdata_url + u'list.json'))
@@ -101,7 +101,7 @@ if __name__ == "__main__":
 library('jsonlite')
 library('httr')
 # Obtain list of all datasets
-datasets<-fromJSON('http://sharkdata.se/datasets/list.json')
+datasets<-fromJSON('https://sharkdata.smhi.se/datasets/list.json')
 # The dataframe datasets contains lists 
 ls(datasets) # shows the contents
 datasets$dataset_name # this one contains names of datasets
@@ -110,7 +110,7 @@ print(length(datasets$dataset_name))
 
 # We take a look at one individual dataset
 setname<-datasets$dataset_name[1] # pick the first
-data_sample<-fromJSON(paste('http://sharkdata.se/datasets/',setname,'/data.json',sep=''))
+data_sample<-fromJSON(paste('https://sharkdata.smhi.se/datasets/',setname,'/data.json',sep=''))
 
 # This list should contain 'header' and 'rows'
 

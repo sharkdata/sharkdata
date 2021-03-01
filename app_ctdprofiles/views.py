@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 
-from django.shortcuts import render
-
 from django.shortcuts import render, HttpResponse
 import django.core.paginator as paginator
 
 from . import ctdprofiles_core
 from app_ctdprofiles import models
 
-import folium
 import urllib.parse
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def listCtdProfiles(request):
@@ -150,7 +151,7 @@ def listCtdProfiles(request):
 
     #     #
     #     datatypes = models.Datasets.objects.values_list('datatype').distinct().order_by('datatype')
-    datatype_list = []
+    #     datatype_list = []
     #     for datatype in datatypes:
     #         try:
     #             datatype_list.append(datatype[0])
@@ -274,16 +275,30 @@ def viewTestPlot(request, profile_name):
 
 def downloadTestPlot(request, profile_name):
     """ """
-    lat_long_desc_table = []
-    ctdprofiles = models.CtdProfiles.objects.filter(ctd_profile_name=profile_name)
-    for db_row in ctdprofiles:
-        row = [
-            db_row.latitude,
-            db_row.longitude,
-            db_row.station_name + "\n" + db_row.sample_date,
-        ]
-        lat_long_desc_table.append(row)
 
-    ctd = ctdprofiles_core.CtdProfilesCore()
+    logger.debug(
+        "Received request for downloading test plot, for profile %s. Request: %s"
+        % (profile_name, str(request))
+    )
 
-    return HttpResponse(content=ctd.createMap(lat_long_desc_table))
+    try:
+        lat_long_desc_table = []
+        ctdprofiles = models.CtdProfiles.objects.filter(ctd_profile_name=profile_name)
+        for db_row in ctdprofiles:
+            row = [
+                db_row.latitude,
+                db_row.longitude,
+                db_row.station_name + "\n" + db_row.sample_date,
+            ]
+            lat_long_desc_table.append(row)
+
+        ctd = ctdprofiles_core.CtdProfilesCore()
+
+        logger.info("Returning test plot for downloading. Profile %s." % (profile_name))
+
+        return HttpResponse(content=ctd.createMap(lat_long_desc_table))
+    except Exception as e:
+        logger.error(
+            "Failed to return test plot for downloading. Requested profile: %s. Exception: %s"
+            % (profile_name, str(e))
+        )

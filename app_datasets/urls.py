@@ -23,7 +23,8 @@ urlpatterns = [
         app_datasets.views.datasetDataColumnsText,
     ),
     path(
-        "<vdataset_name>/data_columns.json/", app_datasets.views.datasetDataColumnsJson
+        "<str:dataset_name>/data_columns.json/",
+        app_datasets.views.datasetDataColumnsJson,
     ),
     #
     path("<str:dataset_name>/metadata.txt/", app_datasets.views.datasetMetadataText),

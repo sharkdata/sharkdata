@@ -1,21 +1,22 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 #
-# Copyright (c) 2013-present SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2013-present SMHI, Swedish Meteorological and Hydrological Institute
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import sharkdata_core
 
+
 class DatasetTable(sharkdata_core.DatasetBase):
     def __init__(self):
-        """ This class should be used for datasets organized as a table with header and rows. 
+        """This class should be used for datasets organized as a table with header and rows.
         It is prepared to be displayed via QAbstractTableModel in Qt, but Qt is not required here.
         """
         super(DatasetTable, self).__init__()
         #
         self._header = []
         self._rows = []
-        
+
     def clear(self):
         """ """
         self._header = []
@@ -46,14 +47,14 @@ class DatasetTable(sharkdata_core.DatasetBase):
         try:
             return self._header[column]
         except Exception:
-            return ''
+            return ""
 
     def getDataItem(self, row, column):
         """ Used for calls from QAbstractTableModel. """
         try:
             return self._rows[row][column]
         except Exception:
-            return ''
+            return ""
 
     def setDataItem(self, row, column, value):
         """ Used for calls from editable table model. """
@@ -65,7 +66,7 @@ class DatasetTable(sharkdata_core.DatasetBase):
             column = self._header.index(column_name)
             return self._rows[row][column]
         except Exception:
-            return ''
+            return ""
 
     def getColumnCount(self):
         """ Used for calls from QAbstractTableModel. """
@@ -80,4 +81,3 @@ class DatasetTable(sharkdata_core.DatasetBase):
             return len(self._rows)
         except Exception:
             return 0
-
