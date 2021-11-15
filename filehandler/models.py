@@ -16,13 +16,7 @@ class FileInfo(models.Model):
     modification_timestamp = models.IntegerField()
 
     @classmethod
-    def create(cls, directory_path, file_name):
-        parts = file_name.split("version")
-        name = parts[0].strip("_").strip()
-        version = parts[1].strip("_").strip() if len(parts) > 1 else ""
-        parts = file_name.split("_")
-        datatype = parts[1].strip("_").strip() if len(parts) > 1 else ""
-
+    def create(cls, directory_path, file_name, name, version, datatype, modification_timestamp):
         file_info = cls(
             directory_path=str(directory_path),
             file_name=file_name,
@@ -65,3 +59,4 @@ class FileInfo(models.Model):
                 self.modification_timestamp,
             )
         )
+

@@ -76,9 +76,9 @@
                            	<td>{{ exportfile.approved }}</td>
                             <td>{{ exportfile.export_name }}</td>
                             <td>{{ exportfile.generated_datetime|date:"Y-m-d H:i" }}</td>
-                            <td><a class="btn btn-primary btn-xs" href="/exportformats/{{ exportfile.export_file_name }}"><span class="glyphicon glyphicon-download-alt"></span></a></td>
+                            <td><a class="btn btn-primary btn-xs" href="/exportformats/{{ exportfile.export_name }}/download"><span class="glyphicon glyphicon-download-alt"></span></a></td>
                             <!-- <td><a class="btn btn-primary btn-xs" href="/exportformats/{{ exportfile.export_name }}.xml"><span class="glyphicon glyphicon-download-alt"></span></a></td> -->
-                            <td><a class="btn btn-primary btn-xs" href="/exportformats/{{ exportfile.export_name }}_log.txt"><span class="glyphicon glyphicon-download-alt"></span></a></td>
+                            <td><a class="btn btn-primary btn-xs" href="/exportformats/{{ exportfile.export_name }}/log.txt"><span class="glyphicon glyphicon-download-alt"></span></a></td>
                         </tr>
                     {% endfor %}
 

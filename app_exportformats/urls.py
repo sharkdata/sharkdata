@@ -15,4 +15,7 @@ urlpatterns = [
     path("table/", app_exportformats.views.tableExportFilesText),
     path("table.txt/", app_exportformats.views.tableExportFilesText),
     path("table.json/", app_exportformats.views.tableExportFilesJson),
+    
+    path("<str:exportformat_name>/log.txt/", app_exportformats.views.downloadLogFile),
+    path("<str:exportformat_name>/download", app_exportformats.views.downloadExportFile),
 ]

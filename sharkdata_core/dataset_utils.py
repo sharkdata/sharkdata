@@ -21,7 +21,6 @@ class DatasetUtils(object):
         self._data_header = None
         self._translations = None
         self._data_in_datasets = settings.SHARKDATA_DATA_IN_DATASETS
-        self._data_datasets = pathlib.Path(settings.SHARKDATA_DATA, "datasets")
         self._metadata_update_thread = None
         self._generate_archives_thread = None
 
@@ -133,27 +132,6 @@ class DatasetUtils(object):
         I multiple versions of a dataset are in the FTP area only the latest
         will be loaded.
         """
-
-        # Check dataset in 'data_in/datasets'. Create a list of dataset names.
-        dataset_names = []
-        for dataset_path in self._data_in_datasets.glob("SHARK_*.zip"):
-            print(dataset_path.name)
-            parts = dataset_path.name.split("_version")
-            if len(parts) >= 1:
-                dataset_names.append(parts[0])
-
-        # Remove all datasets from 'data/datasets' not included in 'dataset_names'.
-        for dataset_path in self._data_datasets.glob("SHARK_*.zip"):
-            print(dataset_path.name)
-            parts = dataset_path.name.split("_version")
-            if len(parts) >= 1:
-                if parts[0] not in dataset_names:
-                    # Delete the file.
-                    dataset_path.unlink()  # Removes file.
-                    # Remove from database.
-                    datasets_models.Datasets.objects.get(
-                        dataset_name=dataset_path.name
-                    ).delete()
 
         error_counter = 0
         # Remove all db rows.

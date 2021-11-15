@@ -18,9 +18,8 @@ class ResourcesUtils(object):
 
     def __init__(self):
         """ """
-        #         self._ftp_dir_path = os.path.join(settings.APP_DATASETS_FTP_PATH, 'resources')
+
         self._data_in_resources = settings.SHARKDATA_DATA_IN_RESOURCES
-        self._data_resources = pathlib.Path(settings.SHARKDATA_DATA, "resources")
 
         self._resource_headers = None
         self._translated_headers = {}

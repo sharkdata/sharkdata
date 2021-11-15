@@ -10,16 +10,18 @@ from sharkdata_core import (
     SharkdataAdminUtils,
     DatasetUtils,
     ResourcesUtils,
-    SharkArchiveFileReader,
-)
+    SharkArchiveFileReader)
 import app_datasets.models as datasets_models
 import app_ctdprofiles.models as ctdprofiles_models
 import app_resources.models as resource_models
-from filehandler.monitored_directory import MonitoredDirectory
+from filehandler.monitored_directory import MonitoredDirectory, ExportFileInfo
 import codecs
 import pathlib
 from enum import Enum
 import logging
+from django.conf import settings
+from app_exportformats.models import ExportFiles
+import time
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -33,6 +35,7 @@ USER = "auto"
 class DataType(Enum):
     DATASETS = "Datasets"
     RESOURCES = "Resources"
+    EXPORTFORMATS = "Export formats"
 
 
 class Command(BaseCommand):
@@ -83,6 +86,7 @@ class Command(BaseCommand):
         print("Log %s finalizes with status %s" % (self.logfile_name, status))
 
     def _updateDb(self, data_type):
+        before_time = time.time()
         self._write_log("\n%s:" % (str(data_type.value)))
 
         error_counter = 0
@@ -97,6 +101,12 @@ class Command(BaseCommand):
             monitored_dir = MonitoredDirectory(ResourcesUtils()._data_in_resources, "*")
             delete_func = self._deleteResourceFromDb
             write_func = self._writeResourceToDb
+        elif data_type == DataType.EXPORTFORMATS:
+            monitored_dir = MonitoredDirectory(settings.SHARKDATA_DATA_IN_EXPORTFORMATS, 
+                                               file_patterns=["*.xml", "*.zip"],
+                                               file_class=ExportFileInfo)
+            delete_func = self._deleteExportFormatsFromDb
+            write_func = self._writeExportFormatsToDb
         else:
             raise TypeError("Invalid data type %s!" % (str(data_type)))
 
@@ -119,8 +129,41 @@ class Command(BaseCommand):
                     + str(e)
                 )
 
+        self._write_log("DB update for %s done. Took %.1f seconds" % (str(data_type), time.time() - before_time))
         return error_counter
-
+    
+    def _deleteExportFormatsFromDb(self, file_info):
+        try:
+            db_obj = ExportFiles.objects.get(
+                export_file_name=file_info.file_name
+            )
+            db_obj.delete()
+        except ExportFiles.DoesNotExist:
+            pass  # Not found.
+        
+    def _writeExportFormatsToDb(self, file_info):
+        """ Extracts info from the export-format file and add to database. """
+        
+        if file_info.log_file == None:
+            self._write_log("WARNING: No log file found for export format file %s" % (file_info.file_name))
+        else:
+            self._write_log("Log file %s found for export format file %s" % (file_info.log_file, file_info.file_name))
+        
+        self._deleteExportFormatsFromDb(file_info)
+        
+        exportfile = ExportFiles(format=file_info.format,
+                                 datatype=file_info.datatype,
+                                 year=file_info.year,
+                                 approved=file_info.approved,
+                                 export_name=file_info.name,
+                                 export_file_name=file_info.file_name,
+                                 export_file_path=file_info.get_file_path(),
+                                 error_log_file=file_info.log_file,
+                                 error_log_file_path=file_info.log_file_path,
+                                 generated_by=file_info.generated_by,
+                                 generated_datetime=file_info.version)
+        exportfile.save()
+        
     def _deleteResourceFromDb(self, file_info):
         try:
             db_resource = resource_models.Resources.objects.get(

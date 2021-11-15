@@ -322,7 +322,7 @@ def sharkArchiveZip(request, dataset_name):
     except Exception as e:
         logger.error(
             "Failed to return SHARK archive file for dataset %s. Exception: %s"
-            % (str(e))
+            % (dataset_name, str(e))
         )
 
 

@@ -5,13 +5,77 @@
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import json
-import codecs
 
-from django.http import HttpResponse
+from django.http import HttpResponse, StreamingHttpResponse
 from django.shortcuts import render
 from django.core import paginator
 from app_exportformats import models
+from wsgiref.util import FileWrapper
+import os
 
+import logging
+
+logger = logging.getLogger(__name__)
+
+def downloadExportFile(request, exportformat_name):
+    """ Returns the export format file. """
+
+    logger.debug(
+        "Request for export format file %s received. Request: %s"
+        % (exportformat_name, str(request))
+    )
+
+    try:
+        #
+        export_file = models.ExportFiles.objects.get(export_name=exportformat_name)
+
+        file_path = export_file.export_file_path
+        
+        file_extension = os.path.splitext(file_path)[1]
+
+        #
+        wrapper = FileWrapper(open(file_path, "rb"))
+        response = StreamingHttpResponse(wrapper, content_type="application/%s" % (file_extension))
+        response["Content-Disposition"] = "attachment; filename=%s" % export_file
+        response["Content-Length"] = os.path.getsize(file_path)
+        #
+
+        logger.info("Returning export format file %s." % (exportformat_name))
+        return response
+    except Exception as e:
+        logger.error(
+            "Failed to return export format file %s. Exception: %s"
+            % (exportformat_name, str(e))
+        )
+        
+def downloadLogFile(request, exportformat_name):
+    """ Returns the export format file. """
+
+    logger.debug(
+        "Request for export format file %s received. Request: %s"
+        % (exportformat_name, str(request))
+    )
+
+    try:
+        #
+        log_file = models.ExportFiles.objects.get(export_name=exportformat_name)
+
+        file_name = log_file.error_log_file
+        file_path = log_file.error_log_file_path
+        #
+        wrapper = FileWrapper(open(file_path, "rb"))
+        response = StreamingHttpResponse(wrapper, content_type="application/txt")
+        response["Content-Disposition"] = "attachment; filename=%s" % file_name
+        response["Content-Length"] = os.path.getsize(file_path)
+        #
+
+        logger.info("Returning export format file %s." % (exportformat_name))
+        return response
+    except Exception as e:
+        logger.error(
+            "Failed to return export format file %s. Exception: %s"
+            % (exportformat_name, str(e))
+        )
 
 def listExportFiles(request):
     """ Generates an HTML page listing all ExportFiles. """

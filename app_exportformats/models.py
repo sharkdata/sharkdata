@@ -26,4 +26,4 @@ class ExportFiles(models.Model):
     generated_datetime = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.dataset_name
+        return self.export_file_name
