@@ -118,11 +118,16 @@ if SHARKDATA_DATA_DIR and SHARKDATA_DATA_DIR != SHARKDATA_DATA_IN:
     setup_data_link_to_target(
         SHARKDATA_DATA_DIR, RESOURCES_FOLDER_NAME, SHARKDATA_DATA_IN_RESOURCES
     )
+    setup_data_link_to_target(
+        SHARKDATA_DATA_DIR, EXPORTFORMATS_FOLDER_NAME, SHARKDATA_DATA_IN_EXPORTFORMATS
+    )
 else:
     if not SHARKDATA_DATA_IN_DATASETS.exists():
         SHARKDATA_DATA_IN_DATASETS.mkdir(parents=True)
     if not SHARKDATA_DATA_IN_RESOURCES.exists():
         SHARKDATA_DATA_IN_RESOURCES.mkdir(parents=True)
+    if not SHARKDATA_DATA_IN_EXPORTFORMATS.exists():
+        SHARKDATA_DATA_IN_EXPORTFORMATS.mkdir(parents=True)
 
 if env_secret_key:
     SECRET_KEY = env_secret_key
