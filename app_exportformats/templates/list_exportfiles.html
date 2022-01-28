@@ -57,8 +57,8 @@
                             <th>Format</th>
                             <th>Datatype</th>
                             <th>Year</th>
-                            <th>Status</th>
-                            <th>Approved</th>
+<!--                             <th>Status</th>
+                            <th>Approved</th> -->
                             <th>Export&nbsp;name</th>
                             <th>Generated</th>
                             <th>Export&nbsp;file</th>
@@ -72,8 +72,8 @@
                             <td>{{ exportfile.format }}</td>
                             <td>{{ exportfile.datatype }}</td>
                             <td>{{ exportfile.year }}</td>
-                            <td>{{ exportfile.status }}</td>
-                           	<td>{{ exportfile.approved }}</td>
+<!--                             <td>{{ exportfile.status }}</td>
+                           	<td>{{ exportfile.approved }}</td> -->
                             <td>{{ exportfile.export_name }}</td>
                             <td>{{ exportfile.generated_datetime|date:"Y-m-d H:i" }}</td>
                             <td><a class="btn btn-primary btn-xs" href="/exportformats/{{ exportfile.export_name }}/download"><span class="glyphicon glyphicon-download-alt"></span></a></td>
