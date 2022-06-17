@@ -86,6 +86,23 @@
 	    <a href="/resources/table.json">https://sharkdata.smhi.se/resources/table.json</a></li>
 	</ul>
 	
+	<h4>Export formats:</h4>
+	<ul>
+	    <li>Available export formats as a text table: <br>
+	    <a href="/exportformats/table.txt">https://sharkdata.smhi.se/exportformats/table.txt</a></li>
+	    <li>Available export formats as a JSON object with header and rows: <br>
+	    <a href="/exportformats/table.json">https://sharkdata.smhi.se/exportformats/table.json</a></li>
+	    <li>Available export formats as a list of JSON objects: <br>
+	    <a href="/exportformats/list.json">https://sharkdata.smhi.se/exportformats/list.json</a></li>
+	    
+	    <li>Log for an export format in text: <br>
+	    <a href="/exportformats/{{ first_exportformat_name }}/log.txt">https://sharkdata.smhi.se/exportformats/{{ first_exportformat_name }}/log.txt</a></li>
+	
+	    <li>Download an export format: <br>
+	    <a href="/exportformats/{{ first_exportformat_name }}/download">https://sharkdata.smhi.se/exportformats/{{ first_exportformat_name }}/download</a></li>
+	
+	</ul>
+	
 	<h3>For developers</h3>
 	<p>
 	SHARKdata is written in Python 3 and based on the 

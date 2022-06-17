@@ -17,6 +17,18 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+EXPORT_FILES_LIST_HEADER = [
+        "format",
+        "generated_by",
+        "datatype",
+        "year",
+        "status",
+        "approved",
+        "export_name",
+        "export_file_name",
+        "generated_datetime",
+    ]
+
 def downloadExportFile(request, exportformat_name):
     """ Returns the export format file. """
 
@@ -151,20 +163,9 @@ def listExportFiles(request):
 
 def listExportFilesJson(request):
     """ Generates a JSON file containing a list of exportfiles and their properties. """
-    data_header = [
-        "format",
-        "datatype",
-        "year",
-        "status",
-        "approved",
-        "export_name",
-        "export_file_name",
-        "generated_datetime",
-    ]
-    #
+    data_rows, data_header = _getExportFilesData()
+    
     exportfiles_json = []
-    #
-    data_rows = models.ExportFiles.objects.values_list(*data_header)
     for data_row in data_rows:
         row_dict = dict(zip(data_header, map(str, data_row)))
         exportfiles_json.append(row_dict)
@@ -179,24 +180,11 @@ def listExportFilesJson(request):
 
 def tableExportFilesText(request):
     """ Generates a text file containing a list of exportfiles and their properties. """
-    #     header_language = request.GET.get('header_language', None)
-    data_header = [
-        "format",
-        "datatype",
-        "year",
-        "status",
-        "approved",
-        "export_name",
-        "export_file_name",
-        "generated_datetime",
-    ]
-    translated_header = data_header
-    #
-    data_rows = models.ExportFiles.objects.values_list(*data_header)
-    #
+    data_rows, data_header = _getExportFilesData()
+    
     response = HttpResponse(content_type="text/plain; charset=cp1252")
     response["Content-Disposition"] = "attachment; filename=sharkdata_exportfiles.txt"
-    response.write("\t".join(translated_header) + "\r\n")  # Tab separated.
+    response.write("\t".join(data_header) + "\r\n")  # Tab separated.
     for row in data_rows:
         response.write("\t".join(map(str, row)) + "\r\n")  # Tab separated.
     return response
@@ -206,19 +194,9 @@ def tableExportFilesJson(request):
     """Generates a text file containing a list of exportfiles and their properties.
     Organised as header and rows.
     """
-    data_header = [
-        "format",
-        "datatype",
-        "year",
-        "status",
-        "approved",
-        "export_name",
-        "export_file_name",
-        "generated_datetime",
-    ]
-    #
-    data_rows = models.ExportFiles.objects.values_list(*data_header)
-    #
+
+    data_rows, data_header = _getExportFilesData()
+
     response = HttpResponse(content_type="application/json; charset=cp1252")
     response["Content-Disposition"] = "attachment; filename=sharkdata_exportfiles.json"
     response.write("{")
@@ -233,3 +211,7 @@ def tableExportFilesJson(request):
     response.write("}")
     #
     return response
+
+def _getExportFilesData():
+    data_header = EXPORT_FILES_LIST_HEADER
+    return models.ExportFiles.objects.values_list(*data_header), data_header

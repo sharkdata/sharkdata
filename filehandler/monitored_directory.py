@@ -92,7 +92,7 @@ class ExportFileInfo(DataFileInfo):
             self.log_file = ""
             self.log_file_path = ""
 
-        self.generated_by = ""  # TODO
+        self.generated_by = pattern_values[settings.FILENAME_PATTERN_ID_INSTITUTE]
         self.version = pattern_values[settings.FILENAME_PATTERN_ID_GENERATED]
 
 
