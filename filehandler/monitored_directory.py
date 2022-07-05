@@ -78,7 +78,10 @@ class ExportFileInfo(DataFileInfo):
 
         self.format = pattern_values[settings.FILENAME_PATTERN_ID_FORMAT]
         self.datatype = pattern_values[settings.FILENAME_PATTERN_ID_DATATYPE]
-        self.year = pattern_values[settings.FILENAME_PATTERN_ID_YEAR]
+        if settings.FILENAME_PATTERN_ID_YEAR in pattern_values:
+            self.year = pattern_values[settings.FILENAME_PATTERN_ID_YEAR]
+        else:
+            self.year = ""
 
         self.approved = False  # TODO
         self.name = os.path.splitext(self.file_name)[0]
