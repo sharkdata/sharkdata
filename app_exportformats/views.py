@@ -19,7 +19,6 @@ logger = logging.getLogger(__name__)
 
 EXPORT_FILES_LIST_HEADER = [
         "format",
-        "generated_by",
         "datatype",
         "year",
         "status",
@@ -27,6 +26,7 @@ EXPORT_FILES_LIST_HEADER = [
         "export_name",
         "export_file_name",
         "generated_datetime",
+        "generated_by",
     ]
 
 def downloadExportFile(request, exportformat_name):
